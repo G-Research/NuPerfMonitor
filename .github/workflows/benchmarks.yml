@@ -1,8 +1,6 @@
 name: benchmarks
 
 on:
-  push:
-    branches: [main]
   workflow_dispatch:
   schedule:
     - cron: '0 */8 * * *' # Run workflow threee times a day
