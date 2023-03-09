@@ -1,4 +1,4 @@
-name: benchmark_dotnet
+name: benchmarks
 
 on:
   push:
@@ -11,7 +11,7 @@ env:
   DOTNET_CLI_TELEMETRY_OPTOUT: true
 
 jobs:
-  benchmark_dotnet_windows:
+  benchmarks_windows:
     strategy:
       matrix:
         test_script: [NuGetClient-win-d76a117]
@@ -36,7 +36,7 @@ jobs:
           name: ${{matrix.test_script}}
           path: ${{matrix.test_script}}.csv
           
-  benchmark_dotnet_linux:
+  benchmarks_linux:
     strategy:
       matrix:
         test_script: [LargeAppCPM64-142722b, LargeAppCPM64-nostaticgraph-142722b, OrchardCore-5dbd92c, Orleans-eda972a]
@@ -62,12 +62,28 @@ jobs:
           path: ${{matrix.test_script}}.csv
 
   process_data:
+    # Only run on main repository
+    # Scheduled workflows do not have information about fork status, hence the hardcoded check
+    if: github.repository == 'G-Research/NuPerfMonitor'
+    environment: updater
     runs-on: ubuntu-latest
-    needs: [benchmark_dotnet_windows, benchmark_dotnet_linux]
+    needs: [benchmarks_windows, benchmarks_linux]
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-        
+
+      - name: Create access token
+        id: token
+        env:
+          APP_ID: ${{ secrets.APP_ID }}
+          APP_PRIVATE_KEY: ${{ secrets.APP_PRIVATE_KEY }}
+        run: |
+          jwt=$(step crypto jwt sign --key /dev/fd/3 --issuer $APP_ID --expiration $(date -d +5min +%s) --subtle 3<<< $APP_PRIVATE_KEY)
+          installation_id=$(curl -s -H "Accept: application/vnd.github.v3+json" -H "Authorization: Bearer $jwt" https://api.github.com/app/installations | jq '.[] | select(.account.login == "${{ github.repository_owner }}") | .id')
+          token=$(curl -s -X POST -H "Accept: application/vnd.github.v3+json" -H "Authorization: Bearer $jwt" https://api.github.com/app/installations/$installation_id/access_tokens | jq -r '.token')
+          echo "::add-mask::$token"
+          echo "token=$token" >> $GITHUB_OUTPUT
+
       - uses: actions/setup-python@v4
         with:
           python-version: "3.8"
@@ -123,6 +139,7 @@ jobs:
           
       - uses: stefanzweifel/git-auto-commit-action@v4
         with:
+          token: ${{ steps.token.outputs.token }}
           file_pattern: 'data.csv'
 
       - name: Upload data
