@@ -18,6 +18,10 @@ $solutionFilePath = "$sourcePath\$solutionFilePath"
 $ProgressPreference = 'SilentlyContinue' #https://github.com/PowerShell/PowerShell/issues/2138 
 if ($globalJsonPath) {Remove-Item "$sourcePath\$globalJsonPath"}
 
+#########################################################
+# https://github.com/G-Research/NuPerfMonitor/issues/8
+Set-Content -Path "$sourcePath\MSBuild.rsp" -Value "-p:EnableSdkContainerSupport=false"
+
 $versions = @("dotnet_base", "dotnet")
 ForEach ($version In $versions) {
 	$url = (Get-Variable ("$version" + "_url")).Value
