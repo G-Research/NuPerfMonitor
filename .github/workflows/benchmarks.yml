@@ -126,7 +126,7 @@ jobs:
           fi
 
       - name: Create new issue if necessary
-        if: steps.alerts.outputs.file_exists == 'true' && ${{github.ref == 'refs/heads/master' }}
+        if: steps.alerts.outputs.file_exists == 'true'
         run: |
           numOpenIssues="$(gh api graphql -F owner=$OWNER -F name=$REPO -f query='
             query($name: String!, $owner: String!) {
@@ -148,7 +148,6 @@ jobs:
           REPO: ${{ github.event.repository.name }}
           
       - uses: stefanzweifel/git-auto-commit-action@v4
-        if: ${{github.ref == 'refs/heads/master' }}
         with:
           file_pattern: 'data.csv'
           commit_author: 'github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>'
