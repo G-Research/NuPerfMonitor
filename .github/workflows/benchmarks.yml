@@ -11,7 +11,12 @@ env:
 
 jobs:
   benchmarks_windows:
-  
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          path: code
+          
   benchmarks_linux:
     strategy:
       matrix:
