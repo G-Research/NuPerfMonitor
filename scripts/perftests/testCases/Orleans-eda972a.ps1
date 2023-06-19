@@ -18,6 +18,9 @@ $solutionFilePath = "$sourcePath\$solutionFilePath"
 $ProgressPreference = 'SilentlyContinue' #https://github.com/PowerShell/PowerShell/issues/2138 
 if ($globalJsonPath) {Remove-Item "$sourcePath\$globalJsonPath"}
 
+#########################################################
+New-Item "$sourcePath\Directory.Build.rsp" -ItemType File -Value "\p:NuGetAudit=disable"
+
 $versions = @("dotnet_base", "dotnet")
 ForEach ($version In $versions) {
 	$url = (Get-Variable ("$version" + "_url")).Value
