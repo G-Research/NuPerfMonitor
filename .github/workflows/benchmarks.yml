@@ -11,6 +11,8 @@ env:
 
 jobs:
   benchmarks_windows:
+  
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v3
