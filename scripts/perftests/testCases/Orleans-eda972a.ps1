@@ -19,7 +19,7 @@ $ProgressPreference = 'SilentlyContinue' #https://github.com/PowerShell/PowerShe
 if ($globalJsonPath) {Remove-Item "$sourcePath\$globalJsonPath"}
 
 #########################################################
-New-Item "$sourcePath\Directory.Build.rsp" -ItemType File -Value "\p:NuGetAudit=disable"
+New-Item "$sourcePath\Directory.Build.rsp" -ItemType File -Value "/p:NuGetAudit=disable"
 
 $versions = @("dotnet_base", "dotnet")
 ForEach ($version In $versions) {
