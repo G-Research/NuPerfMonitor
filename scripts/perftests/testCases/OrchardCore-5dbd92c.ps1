@@ -21,7 +21,7 @@ if ($globalJsonPath) {Remove-Item "$sourcePath\$globalJsonPath"}
 #########################################################
 # https://github.com/G-Research/NuPerfMonitor/issues/8
 # Workaround for errors due to a vulnerability scanning (https://github.com/NuGet/Home/blob/dev/proposed/2022/vulnerabilities-in-restore.md)
-Set-Content -Path "$sourcePath\MSBuild.rsp" -Value "-p:EnableSdkContainerSupport=false -p:WarningsNotAsErrors=NU1901;NU1902;NU1903;NU1904"
+Set-Content -Path "$sourcePath\MSBuild.rsp" -Value "-p:EnableSdkContainerSupport=false -warnaserror -warnNotAsError:NU1901;NU1902;NU1903;NU1904"
 
 $versions = @("dotnet_base", "dotnet")
 ForEach ($version In $versions) {
