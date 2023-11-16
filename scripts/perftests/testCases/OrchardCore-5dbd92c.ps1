@@ -19,7 +19,6 @@ $ProgressPreference = 'SilentlyContinue' #https://github.com/PowerShell/PowerShe
 if ($globalJsonPath) {Remove-Item "$sourcePath\$globalJsonPath"}
 
 #########################################################
-# https://github.com/G-Research/NuPerfMonitor/issues/8
 # Workaround for errors due to a vulnerability scanning (https://github.com/NuGet/Home/blob/dev/proposed/2022/vulnerabilities-in-restore.md)
 New-Item "$sourcePath\Directory.Build.rsp" -Value "/p:NuGetAudit=disable"
 
