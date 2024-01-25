@@ -19,7 +19,7 @@ jobs:
     steps:
 
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           path: code
 
@@ -44,7 +44,7 @@ jobs:
     steps:
 
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           path: code
 
@@ -90,7 +90,7 @@ jobs:
           echo "token=$token" >> $GITHUB_OUTPUT
 
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           token: ${{ steps.token.outputs.token }}
 
