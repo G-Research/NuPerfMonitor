@@ -110,6 +110,11 @@ jobs:
         run: |
           Get-ChildItem -File -Path artifacts -Depth 1 | Foreach {. python3 process_results.py $_.fullname data.csv}
 
+      - name: Lint - Python
+        shell: pwsh
+        run: |
+          pylint *.py
+
       - name: Generate graph with Plotly for Python
         if: ${{ false }}
         shell: pwsh
