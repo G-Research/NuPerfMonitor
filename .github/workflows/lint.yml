@@ -26,4 +26,4 @@ jobs:
       - name: Lint - Python
         shell: pwsh
         run: |
-          pylint *.py
+          pylint *.py --fail-under=9.5
