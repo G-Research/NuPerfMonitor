@@ -3,63 +3,70 @@ Usage:
     generate_alert.py data.csv regressions.txt
 """
 
+import os
 import sys
+import datetime
 import pandas as pd
-import plotly.express as px
-import datetime;
-import time;
-import os;
-
-from pathlib import Path
-from io import StringIO
 
 # number of samples needed to calculate regression
-n_samples = 10
+SAMPLES = 10
 
 # number of days to look back when calculating regression
-n_days = 14
+DAYS = 14
 
 # threshold in percents
-threshold = 110
+THRESHOLD = 110
 
 # quantile
-q = 0.25
+QUANTILE = 0.25
 
-def fetch_csv(csvPath: str) -> pd.DataFrame:
-    return pd.read_csv(csvPath)
+def fetch_csv(csv_path: str) -> pd.DataFrame:
+    """Fetch CSV"""
+    return pd.read_csv(csv_path)
 
-def get_regression(data: pd.DataFrame) -> [str]:
-    regressions = []
-    grouped_data = data.groupby(["scenario", "solution"])
-    for (k, d) in grouped_data:
+def get_regression(data_frame: pd.DataFrame) -> [str]:
+    """Regression"""
+    regression_list = []
+    grouped_data = data_frame.groupby(["scenario", "solution"])
+    for (_, d) in grouped_data:
 
-        if len(d["relative duration"].values) < n_samples:
+        if len(d["relative duration"].values) < SAMPLES:
             continue
 
         # take quantile .25 from last 10 items
-        result = d["relative duration"][-n_samples:].quantile(q)
-        if result > threshold:
+        result = d["relative duration"][-SAMPLES:].quantile(QUANTILE)
+        if result > THRESHOLD:
             formatters = {
-                'timestamp': (lambda a : a.strftime("%Y-%m-%d %H:%M:%S ")),
-                'duration': (lambda a : "{:.2f}s".format(float(a))),
-                'base duration': (lambda a : "{:.2f}s".format(float(a))),
-                'relative duration': (lambda a : "{:.2f}%".format(float(a))),
+                'timestamp': (lambda a: a.strftime("%Y-%m-%d %H:%M:%S ")),
+                'duration': (lambda a: f"{float(a):.2f}s"),
+                'base duration': (lambda a: f"{float(a):.2f}s"),
+                'relative duration': (lambda a: f"{float(a):.2f}%"),
             }
-            columns = ['timestamp', 'version', 'duration', 'base duration', 'relative duration']
+            columns = [
+                'timestamp',
+                'version',
+                'duration',
+                'base duration',
+                'relative duration']
             header = "Scenario = " + str(d["scenario"].values[-1]) + "\n" + \
                      "Base Version = " + str(d["base version"].values[-1]) + "\n" + \
                      "Solution = " + str(d["solution"].values[-1])
-            data_string = f'{d[-n_samples:].to_string(header=True, index=False, justify="right", columns=columns, formatters=formatters)}'
+            data_string = (
+                d[-SAMPLES:].to_string(
+                    header=True, index=False, justify="right",
+                    columns=columns, formatters=formatters
+                )
+            )
             line_length = len(data_string.splitlines()[0])
             line = '-' * line_length
-            regressions.append('\n' + line)
-            regressions.append(header)
-            regressions.append(line)
-            regressions.append(data_string)
-            regressions.append(line)
-            regressions.append("")
+            regression_list.append('\n' + line)
+            regression_list.append(header)
+            regression_list.append(line)
+            regression_list.append(data_string)
+            regression_list.append(line)
+            regression_list.append("")
 
-    return regressions
+    return regression_list
 
 if __name__ == "__main__":
     data = fetch_csv(sys.argv[1])
@@ -67,13 +74,13 @@ if __name__ == "__main__":
     data = data.loc[data["scenario"] != 'warmup']
 
     now = datetime.datetime.now(datetime.timezone.utc)
-    cutoff_date = now - datetime.timedelta(days=n_days)
+    cutoff_date = now - datetime.timedelta(days=DAYS)
     data = data.loc[data["timestamp"] > cutoff_date]
 
     regressions = get_regression(data)
 
     if regressions:
-        with open(sys.argv[2], 'w') as fp:
-            fp.write('\n'.join([x for x in regressions]))
+        with open(sys.argv[2], 'w', encoding='utf-8') as fp:
+            fp.write('\n'.join(regressions))
     elif os.path.exists(sys.argv[2]):
         os.remove(sys.argv[2])

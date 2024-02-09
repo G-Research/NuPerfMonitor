@@ -4,19 +4,20 @@ Usage:
 """
 
 import sys
+import datetime
 import pandas as pd
 import plotly.express as px
-import datetime;
-from pathlib import Path
-from io import StringIO
 
 # number of days to look back
-n_days = 180
+DAYS = 180
 
-def fetch_csv(csvPath: str) -> pd.DataFrame:
-    return pd.read_csv(csvPath)
+def fetch_csv(csv_path: str) -> pd.DataFrame:
+    """Fetch CSV"""
+    return pd.read_csv(csv_path)
+
 
 def plot_cumulative_state(df: pd.DataFrame, outfile: str):
+    """Plot cumulative states"""
     fig = px.line(
         df,
         x="timestamp",
@@ -26,8 +27,13 @@ def plot_cumulative_state(df: pd.DataFrame, outfile: str):
         facet_col="scenario",
         facet_col_wrap=1,
         markers=True,
-        hover_data=["solution", "scenario", "duration", "timestamp", "version", "base version"]
-    )
+        hover_data=[
+            "solution",
+            "scenario",
+            "duration",
+            "timestamp",
+            "version",
+            "base version"])
 
     fig.update_traces(marker={'size': 4})
     fig.update_layout(title_x=0.5)
@@ -43,7 +49,7 @@ if __name__ == "__main__":
     data = data.loc[data["scenario"] != 'warmup']
 
     now = datetime.datetime.now(datetime.timezone.utc)
-    cutoff_date = now - datetime.timedelta(days=n_days)
+    cutoff_date = now - datetime.timedelta(days=DAYS)
     data = data.loc[data["timestamp"] > cutoff_date]
 
     plot_cumulative_state(data, sys.argv[2])

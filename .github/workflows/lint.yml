@@ -1,0 +1,29 @@
+name: Lint
+
+on:
+  push:
+  pull_request:
+
+env:
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
+  DOTNET_CLI_TELEMETRY_OPTOUT: true
+
+jobs:
+  lint:
+    runs-on: windows-latest
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.8"
+
+      - name: Install dependencies
+        run: pip3 install -r requirements.txt
+
+      - name: Lint - Python
+        shell: pwsh
+        run: |
+          pylint *.py --fail-under=9.5
