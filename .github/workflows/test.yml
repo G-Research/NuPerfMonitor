@@ -1,0 +1,35 @@
+# Idea is that for the given input like `test_data.csv` the output should always be the same
+# Within this process we make sure that `generate_alert.py` have right logic and correct output
+name: Unit test
+
+on:
+  workflow_dispatch:
+  pull_request:
+
+jobs:
+  unit-test:
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.8"
+
+      - name: Install dependencies
+        run: pip3 install -r requirements.txt
+
+      - name: Check the output
+        run: |
+          python3 generate_alert.py $TEST_DATA $REGRESSION_PATH
+          FILE_SUM=$(md5sum $REGRESSION_PATH | awk '{ print $1 }')
+          if [ "$FILE_SUM" != "$REGRESSION_MD5" ]; then
+              echo "Created file $REGRESSION_PATH does not match expected MD5SUM"
+              exit 1
+          fi
+        env:
+          TEST_DATA: "scripts/unit-tests/test_data.csv"
+          REGRESSION_MD5: "89432f97093570a54e013ed1fb66d171"
+          REGRESSION_PATH: "scripts/unit-tests/test_regressions.txt"
