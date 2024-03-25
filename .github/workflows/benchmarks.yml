@@ -157,4 +157,6 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: active_regressions
-          path: active_regressions.txt
+          path: |
+            data.csv
+            active_regressions.txt
