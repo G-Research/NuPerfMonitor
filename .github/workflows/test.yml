@@ -14,22 +14,13 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.8"
-
-      - name: Install dependencies
-        run: pip3 install -r requirements.txt
-
-      - name: Check the output
+      # If there is difference between files, job will fail
+      - name: Verify the 
+        id: verify
         run: |
           python3 generate_alert.py $TEST_DATA $REGRESSION_PATH
-          FILE_SUM=$(md5sum $REGRESSION_PATH | awk '{ print $1 }')
-          if [ "$FILE_SUM" != "$REGRESSION_MD5" ]; then
-              echo "Created file $REGRESSION_PATH does not match expected MD5SUM"
-              exit 1
-          fi
+          diff $TEST_REGRESSION_PATH $REGRESSION_PATH
         env:
           TEST_DATA: "scripts/unit-tests/test_data.csv"
-          REGRESSION_MD5: "89432f97093570a54e013ed1fb66d171"
-          REGRESSION_PATH: "scripts/unit-tests/test_regressions.txt"
+          TEST_REGRESSION_PATH: "scripts/unit-tests/test_regressions.txt"
+          REGRESSION_PATH: "scripts/unit-tests/regressions.txt"
