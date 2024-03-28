@@ -14,8 +14,15 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.8"
+
+      - name: Install dependencies
+        run: pip3 install -r requirements.txt
+
       # If there is difference between files, job will fail
-      - name: Verify the 
+      - name: Compare results
         id: verify
         run: |
           python3 generate_alert.py $TEST_DATA $REGRESSION_PATH
