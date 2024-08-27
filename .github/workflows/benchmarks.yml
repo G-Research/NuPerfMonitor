@@ -3,7 +3,6 @@ name: benchmarks
 on:
   workflow_dispatch:
   pull_request:
-  push:
   schedule:
     - cron: '0 */8 * * *' # Run workflow threee times a day
 env:
