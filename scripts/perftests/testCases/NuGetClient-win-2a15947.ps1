@@ -2,7 +2,7 @@
 $dotnet_base_url = "https://download.visualstudio.microsoft.com/download/pr/2b2d6133-c4f9-46dd-9ab6-86443a7f5783/340054e2ac7de2bff9eea73ec9d4995a/dotnet-sdk-8.0.100-win-x64.zip"
 $dotnet_url = Get-Content -Path $PSScriptRoot\daily-windows.txt
 $repoUrl = "https://github.com/NuGet/NuGet.Client.git"
-$commitHash = "d76a117c590f8a91b844013bba7ea9b60e469aa1"
+$commitHash = "2a15947b853fcaa7804743f9e171d7824cf2f775"
 $solutionFilePath = "NuGet.sln"
 $globalJsonPath = "global.json"
 
