@@ -8,12 +8,13 @@ on:
 env:
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
   DOTNET_CLI_TELEMETRY_OPTOUT: true
+  DOTNET_MULTILEVEL_LOOKUP: 0 
 
 jobs:
   benchmarks_windows:
     strategy:
       matrix:
-        test_script: [NuGetClient-win-d76a117]
+        test_script: [NuGetClient-win-2a15947]
       fail-fast: false
     runs-on: windows-latest
     steps:
