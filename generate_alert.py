@@ -76,7 +76,7 @@ if __name__ == "__main__":
     data = data.loc[-ROWS:]
 
     regressions = get_regression(data)
-    
+
     if regressions:
         with open(sys.argv[2], 'w', encoding='utf-8') as fp:
             fp.write('\n'.join(regressions))
