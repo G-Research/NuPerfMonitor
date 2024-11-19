@@ -11,8 +11,8 @@ import pandas as pd
 # number of samples needed to calculate regression
 SAMPLES = 10
 
-# number of days to look back when calculating regression
-DAYS = 14
+# number of rows (days) to look back when calculating regression
+ROWS = 14 * 3
 
 # threshold in percents
 THRESHOLD = 110
@@ -73,12 +73,10 @@ if __name__ == "__main__":
     data["timestamp"] = pd.to_datetime(data["timestamp"])
     data = data.loc[data["scenario"] != 'warmup']
 
-    now = datetime.datetime.now(datetime.timezone.utc)
-    cutoff_date = now - datetime.timedelta(days=DAYS)
-    data = data.loc[data["timestamp"] > cutoff_date]
+    data = data.loc[-ROWS:]
 
     regressions = get_regression(data)
-
+    
     if regressions:
         with open(sys.argv[2], 'w', encoding='utf-8') as fp:
             fp.write('\n'.join(regressions))
