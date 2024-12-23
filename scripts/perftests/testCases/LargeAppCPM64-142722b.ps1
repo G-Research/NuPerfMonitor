@@ -27,5 +27,6 @@ ForEach ($version In $versions) {
 	. ".\$version\dotnet" --info
 	$env:DOTNET_ROOT = (Resolve-Path ".\$version").Path
 	$env:path = (Resolve-Path ".\$version\").Path + $env:Path
+	echo $env:Path
 	. "$PSScriptRoot\..\RunPerformanceTests.ps1" -nugetClientFilePath "$version\dotnet" -solutionFilePath $solutionFilePath -resultsFilePath $resultsFilePath -iterationCount 1 -staticGraphRestore
 }
