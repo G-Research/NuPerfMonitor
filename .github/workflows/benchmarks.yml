@@ -54,7 +54,9 @@ jobs:
         run: |
           .\code\scripts\perftests\testCases\${{matrix.test_script}}.ps1
           Rename-Item -Path "results.csv" -NewName "${{matrix.test_script}}.csv"
-          
+        env:
+          DOTNET_MULTILEVEL_LOOKUP: 0 
+
       - name: Upload benchmark results
         uses: actions/upload-artifact@v4
         with:
