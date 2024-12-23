@@ -25,5 +25,6 @@ ForEach ($version In $versions) {
 	New-Item -Name "$version" -ItemType "Directory"
 	. tar xfz ("$version" + ".tar.gz") --directory "$version"
 	. ".\$version\dotnet" --info
+	$env:DOTNET_ROOT = ".\$version\dotnet"
 	. "$PSScriptRoot\..\RunPerformanceTests.ps1" -nugetClientFilePath "$version\dotnet" -solutionFilePath $solutionFilePath -resultsFilePath $resultsFilePath -iterationCount 1 -staticGraphRestore
 }
