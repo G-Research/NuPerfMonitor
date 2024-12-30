@@ -1,1 +1,1 @@
-https://aka.ms/dotnet/10.0.1xx/daily/dotnet-sdk-linux-x64.tar.gz
+https://download.visualstudio.microsoft.com/download/pr/93a7156d-01ef-40a1-b6e9-bbe7602f7e8b/3c93e90c63b494972c44f073e15bfc26/dotnet-sdk-9.0.101-linux-arm64.tar.gz
