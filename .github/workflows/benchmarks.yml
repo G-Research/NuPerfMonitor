@@ -55,7 +55,7 @@ jobs:
       - name: Benchmark
         shell: pwsh
         run: |
-          .\code\scripts\perftests\testCases\${{matrix.test_script}}.ps1
+          .\code\scripts\perftests\testCases\${{matrix.test_script}}.ps
           Rename-Item -Path "results.csv" -NewName "${{matrix.test_script}}.csv"
 
       - name: Upload benchmark results
