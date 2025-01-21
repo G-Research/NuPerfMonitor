@@ -9,7 +9,6 @@ env:
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
   DOTNET_CLI_TELEMETRY_OPTOUT: true
   DOTNET_MULTILEVEL_LOOKUP: 0 
-  MSBUILDDISABLENODEREUSE: 1 
 
 jobs:
   benchmarks_windows:
@@ -55,7 +54,7 @@ jobs:
       - name: Benchmark
         shell: pwsh
         run: |
-          .\code\scripts\perftests\testCases\${{matrix.test_script}}.ps
+          .\code\scripts\perftests\testCases\${{matrix.test_script}}.ps1
           Rename-Item -Path "results.csv" -NewName "${{matrix.test_script}}.csv"
 
       - name: Upload benchmark results
