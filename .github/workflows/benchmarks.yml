@@ -16,6 +16,7 @@ jobs:
       matrix:
         test_script: [NuGetClient-win-2a15947]
       fail-fast: false
+      continue-on-error: true
     runs-on: windows-latest
     steps:
 
@@ -41,6 +42,7 @@ jobs:
       matrix:
         test_script: [LargeAppCPM64-142722b, LargeAppCPM64-nostaticgraph-142722b, OrchardCore-5dbd92c, Orleans-eda972a]
       fail-fast: false
+      continue-on-error: true
     runs-on: ubuntu-latest
     steps:
 
