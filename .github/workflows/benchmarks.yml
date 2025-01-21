@@ -66,7 +66,7 @@ jobs:
   process_data:
     # Only run on main repository
     # Scheduled workflows do not have information about fork status, hence the hardcoded check
-    if: always() && github.repository == 'G-Research/NuPerfMonitor'
+    if: always() && github.repository == 'G-Research/NuPerfMonitor' && github.ref == 'refs/heads/main'
     environment: updater
     runs-on: ubuntu-latest
     needs: [benchmarks_windows, benchmarks_linux]
