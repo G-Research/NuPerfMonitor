@@ -16,6 +16,7 @@ jobs:
       matrix:
         test_script: [NuGetClient-win-2a15947]
       fail-fast: false
+    continue-on-error: true
     runs-on: windows-latest
     steps:
 
@@ -41,6 +42,7 @@ jobs:
       matrix:
         test_script: [LargeAppCPM64-142722b, LargeAppCPM64-nostaticgraph-142722b, OrchardCore-5dbd92c, Orleans-eda972a]
       fail-fast: false
+    continue-on-error: true
     runs-on: ubuntu-latest
     steps:
 
@@ -54,7 +56,7 @@ jobs:
         run: |
           .\code\scripts\perftests\testCases\${{matrix.test_script}}.ps1
           Rename-Item -Path "results.csv" -NewName "${{matrix.test_script}}.csv"
-          
+
       - name: Upload benchmark results
         uses: actions/upload-artifact@v4
         with:
@@ -64,7 +66,7 @@ jobs:
   process_data:
     # Only run on main repository
     # Scheduled workflows do not have information about fork status, hence the hardcoded check
-    if: github.repository == 'G-Research/NuPerfMonitor' && github.ref == 'refs/heads/main'
+    if: always() && github.repository == 'G-Research/NuPerfMonitor' && github.ref == 'refs/heads/main'
     environment: updater
     runs-on: ubuntu-latest
     needs: [benchmarks_windows, benchmarks_linux]
