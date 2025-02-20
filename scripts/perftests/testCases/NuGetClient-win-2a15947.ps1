@@ -21,7 +21,7 @@ if ($globalJsonPath) {Remove-Item "$sourcePath\$globalJsonPath"}
 #########################################################
 # Workaround for:
 # - https://learn.microsoft.com/en-us/nuget/reference/errors-and-warnings/nu1510
-New-Item "$sourcePath\Directory.Build.rsp" -ItemType File -Value "/p:NoWarn=NU1510"
+Add-Content -Path "$sourcePath\Directory.Build.rsp" -Value "/p:NoWarn=NU1510"
 
 $versions = @("dotnet_base", "dotnet")
 ForEach ($version In $versions) {
