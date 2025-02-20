@@ -18,6 +18,11 @@ $solutionFilePath = "$sourcePath\$solutionFilePath"
 $ProgressPreference = 'SilentlyContinue' #https://github.com/PowerShell/PowerShell/issues/2138 
 if ($globalJsonPath) {Remove-Item "$sourcePath\$globalJsonPath"}
 
+#########################################################
+# Workaround for:
+# - https://learn.microsoft.com/en-us/nuget/reference/errors-and-warnings/nu1510
+New-Item "$sourcePath\Directory.Build.rsp" -ItemType File -Value "/p:NoWarn=NU1510"
+
 $versions = @("dotnet_base", "dotnet")
 ForEach ($version In $versions) {
 	$url = (Get-Variable ("$version" + "_url")).Value
