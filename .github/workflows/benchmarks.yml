@@ -161,13 +161,3 @@ jobs:
           path: |
             data.csv
             active_regressions.txt
-
-  workflow_conclusion:
-    # Fail the workflow if any benchmarks fails
-    if: always()
-    runs-on: ubuntu-latest
-    needs: [benchmarks_windows, benchmarks_linux]
-    steps:
-      - name: Process data
-        run: |
-          echo 'Sucess!'
