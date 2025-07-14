@@ -26,9 +26,9 @@ Add-Content -Path "$sourcePath\Directory.Build.rsp" -Value "/p:CheckEolTargetFra
 
 $versions = @("dotnet_base", "dotnet")
 ForEach ($version In $versions) {
-	. "$version\dotnet.exe" --info
 	$url = (Get-Variable ("$version" + "_url")).Value
 	Invoke-WebRequest -Uri "$url" -OutFile ("$version" + ".zip")
     Expand-Archive ("$version" + ".zip") -DestinationPath "$version"
+	. ".\$version\dotnet.exe" --info
 	. "$PSScriptRoot\..\RunPerformanceTests.ps1" -nugetClientFilePath "$version\dotnet.exe" -solutionFilePath $solutionFilePath -resultsFilePath $resultsFilePath -iterationCount 1
 }
