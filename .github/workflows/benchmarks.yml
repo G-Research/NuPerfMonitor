@@ -102,7 +102,7 @@ jobs:
       - name: Install dependencies
         run: pip3 install -r requirements.txt
         
-      - uses: actions/download-artifact@v6
+      - uses: actions/download-artifact@v7
         with:
          path: artifacts
 
