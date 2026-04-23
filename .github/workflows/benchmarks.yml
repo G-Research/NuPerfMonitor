@@ -27,6 +27,7 @@ jobs:
       - name: Benchmark
         shell: pwsh
         run: |
+          dotnet --info
           .\code\scripts\perftests\testCases\${{matrix.test_script}}.ps1
           Rename-Item -Path "results.csv" -NewName "${{matrix.test_script}}.csv"
           
@@ -52,6 +53,7 @@ jobs:
       - name: Benchmark
         shell: pwsh
         run: |
+          dotnet --info
           .\code\scripts\perftests\testCases\${{matrix.test_script}}.ps1
           Rename-Item -Path "results.csv" -NewName "${{matrix.test_script}}.csv"
 
